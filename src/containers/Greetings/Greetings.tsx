@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import icon from '../../assets/img/icon-128.png';
+// import icon from '../../assets/img/logo.png';
 
-class GreetingComponent extends Component {
+class Greetings extends Component {
   state = {
     name: 'dev',
   };
@@ -10,10 +10,10 @@ class GreetingComponent extends Component {
     return (
       <div>
         <p>Hello, {this.state.name}!</p>
-        <img src={icon} alt="extension icon" />
+        {/* <img src={icon} alt="extension icon" /> */}
       </div>
     );
   }
 }
 
-export default GreetingComponent;
+export default Greetings;
