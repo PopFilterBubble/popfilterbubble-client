@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import './Popup.css'
+import { useState } from 'react';
+import './Popup.css';
 
 function App() {
-  const [crx, setCrx] = useState('create-chrome-ext')
+  const [crx, setCrx] = useState('create-chrome-ext');
 
   return (
     <main>
@@ -14,7 +14,7 @@ function App() {
         Power by {crx}
       </a>
     </main>
-  )
+  );
 }
 
-export default App
+export default App;

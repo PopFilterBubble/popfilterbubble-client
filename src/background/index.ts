@@ -1,3 +1,3 @@
-console.info('chrome-ext template-react-ts background script')
+console.info('chrome-ext template-react-ts background script');
 
-export {}
+export {};
