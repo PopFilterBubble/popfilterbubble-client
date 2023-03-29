@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import './Popup.css';
 import PieChartComponent from './PieChartComponent';
-
 
 function App() {
   const [crx, setCrx] = useState('create-chrome-ext');
@@ -12,6 +10,7 @@ function App() {
       <PieChartComponent/>
 
       
+      <h1 className="text-blue-600 font-bold">Hello world!</h1>
     </main>
   );
 }

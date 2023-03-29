@@ -1,11 +1,11 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./src/popup/Popup.tsx" //템플릿 파일 경로 설정
-  ],
+module.exports = {
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {},
   },
   plugins: [],
-}
-
+  variants: {},
+  corePlugins: {
+    preflight: true,
+  },
+};
