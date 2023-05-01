@@ -58,3 +58,31 @@ function observeScrollEnd(): void {
 }
 
 observeScrollEnd();
+
+
+function createCustomLayout() {
+  // Create a container for your custom layout
+  const container = document.createElement('div');
+  container.style.backgroundColor = 'white';
+  container.style.padding = '10px';
+  container.style.border = '1px solid black';
+
+  // Add any other elements you want in your custom layout
+  const message = document.createElement('p');
+  message.textContent = 'This is a custom layout!';
+  container.appendChild(message);
+
+  // Find the element with the ID "contents"
+  const contentsElement = document.getElementById('contents');
+
+  // Check if the contentsElement exists
+  if (contentsElement) {
+    // Insert the custom layout as the first child of the "contents" element
+    contentsElement.insertBefore(container, contentsElement.firstChild);
+  } else {
+    console.warn('Element with ID "contents" not found.');
+  }
+}
+
+// Call the function to insert the custom layout
+createCustomLayout();
