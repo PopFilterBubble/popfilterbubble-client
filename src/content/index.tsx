@@ -1,3 +1,7 @@
+import React from 'react';
+import { render } from 'react-dom';
+import VideoList from '../popup/components/VideoList';
+
 console.info('pop-filterbubble-client content script');
 
 interface VideoData {
@@ -57,4 +61,30 @@ function observeScrollEnd(): void {
   observer.observe(targetNode, config);
 }
 
+function insertCustomComponent() {
+  // Create a container for your custom layout
+  const container = document.createElement('div');
+  container.style.backgroundColor = 'white';
+  container.style.padding = '10px';
+  container.style.border = '1px solid black';
+
+  // Find the element with the ID "contents"
+  const contentsElement = document.getElementById('contents');
+
+  // Check if the contentsElement exists
+  if (contentsElement) {
+    // Insert the container as the first child of the "contents" element
+    contentsElement.insertBefore(container, contentsElement.firstChild);
+
+    // Render the React component into the container
+    render(<VideoList />, container);
+  } else {
+    console.warn('Element with ID "contents" not found.');
+  }
+}
+
 observeScrollEnd();
+insertCustomComponent();
+
+
+
