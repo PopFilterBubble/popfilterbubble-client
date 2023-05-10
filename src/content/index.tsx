@@ -62,30 +62,43 @@ function observeScrollEnd(): void {
   observer.observe(targetNode, config);
 }
 
+observeScrollEnd();
+// insertCustomComponent();
+
+window.addEventListener('resize', () => {
+  insertCustomComponent();
+});
+
 function insertCustomComponent() {
+  // Check if the component already exists
+  const existingContainer = document.getElementById('my-custom-container');
+  if (existingContainer) {
+    return; // The component already exists, so we do nothing
+  }
+
   // Create a container for your custom layout
   const container = document.createElement('div');
+  container.id = 'my-custom-container'; // Assign an ID to the container
   container.style.backgroundColor = 'white';
   container.style.padding = '10px';
   container.style.border = '1px solid black';
 
-  // Find the element with the ID "contents"
-  const contentsElement = document.getElementById('contents');
+  const nextElement = document.getElementById('contents'); // replace 'next-element-id' with the actual ID
 
-  // Check if the contentsElement exists
-  if (contentsElement) {
-    // Insert the container as the first child of the "contents" element
-    contentsElement.insertBefore(container, contentsElement.firstChild);
+  // Check if the nextElement exists
+  if (nextElement && nextElement.parentElement) {
+    // Insert the container right before the nextElement
+    nextElement.parentElement.insertBefore(container, nextElement);
 
+    // Create a root and render the React component into the container
     const root = createRoot(container);
     root.render(<VideoList />);
   } else {
-    console.warn('Element with ID "contents" not found.');
+    console.warn('Element with ID "next-element-id" not found.'); // replace 'next-element-id' with the actual ID
   }
 }
 
-observeScrollEnd();
+// Initial insert
 insertCustomComponent();
-
 
 
