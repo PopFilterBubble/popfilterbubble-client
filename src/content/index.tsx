@@ -1,7 +1,8 @@
+import '../tailwind.css';
 import React from 'react';
 import { render } from 'react-dom';
-import VideoList from '../popup/components/VideoList';
 import { createRoot } from 'react-dom/client';
+import VideoList from '../popup/components/VideoList';
 
 console.info('pop-filterbubble-client content script');
 
