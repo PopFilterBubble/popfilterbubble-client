@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import VideoList from '../popup/components/VideoList';
+import { createRoot } from 'react-dom/client';
 
 console.info('pop-filterbubble-client content script');
 
@@ -76,8 +77,8 @@ function insertCustomComponent() {
     // Insert the container as the first child of the "contents" element
     contentsElement.insertBefore(container, contentsElement.firstChild);
 
-    // Render the React component into the container
-    render(<VideoList />, container);
+    const root = createRoot(container);
+    root.render(<VideoList />);
   } else {
     console.warn('Element with ID "contents" not found.');
   }
