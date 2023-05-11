@@ -80,9 +80,10 @@ function insertCustomComponent() {
   // Create a container for your custom layout
   const container = document.createElement('div');
   container.id = 'my-custom-container'; // Assign an ID to the container
-  container.style.backgroundColor = 'white';
-  container.style.padding = '10px';
-  container.style.border = '1px solid black';
+  container.style.backgroundColor = '#FFFFEE';
+  //container.style.paddingLeft = '24px'
+  //container.style.paddingRight = '24px';
+  //container.style.border = '1px solid black';
 
   const nextElement = document.getElementById('contents'); // replace 'next-element-id' with the actual ID
 
