@@ -5,7 +5,6 @@ function App() {
   return (
     <main>
       <PieChartComponent />
-      <VideoList />
     </main>
   );
 }
