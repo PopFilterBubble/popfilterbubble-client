@@ -3,16 +3,16 @@ import { sampleVideoList } from './sample';
 
 export const VideoList = () => {
   return (
-    <div className="p-4 flex overflow-x-auto mx-8 ">
-      {sampleVideoList.map((video, index) => (
-        <div className='flex mx-3  '>
-          <VideoComponent key={index} {...video} />
-
-        </div>
-        
-      ))}
+    <div className='mx-8'>
+      <h1 className='ml-7 mt-8 mb-4 text-[24px] font-semibold'>팝필터버블이 추천하는 영상 리스트</h1>
+      <div className="p-4 flex overflow-x-auto ">
+        {sampleVideoList.map((video, index) => (
+          <div key={index} className="flex mx-3">
+            <VideoComponent {...video} />
+          </div>
+        ))}
+      </div>
     </div>
-    //<VideoComponent {...sampleVideoList[0]} />
   );
 };
 
@@ -83,18 +83,17 @@ const VideoComponent = ({
           />
         </div>
         <div>
-          <h2 className="mb-[4px] w-[286px] text-[16px] overflow-hidden line-clamp-2 cursor-pointer">
+          <h2 className="mb-[4px] w-[286px] text-[16px] overflow-hidden line-clamp-2 cursor-pointer font-medium">
             {title}
           </h2>
           <div>
-            <p className="text-[#606060] text-[14px] cursor-pointer leading-6 mb-2" >{channelName}</p>
-            <p className="text-[#606060] text-[14px] cursor-pointer leading-5">
+            <p className="text-[14px] cursor-pointer leading-6 mb-2">{channelName}</p>
+            <p className="text-[14px] cursor-pointer leading-5">
               조회수 {views} · {uploadedAt}
             </p>
           </div>
-          </div>
-          
-    </div>
+        </div>
+      </div>
     </div>
   );
 };
