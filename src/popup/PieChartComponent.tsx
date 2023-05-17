@@ -3,11 +3,11 @@ import { PieChart, Pie, Legend, Sector, Cell, ResponsiveContainer } from 'rechar
 
 const PieChartComponent = () => {
   const data = [
-    { name: '진보', value: 700 },
-    { name: '보수', value: 500 },
+    { name: '진보', value: 5 },
+    { name: '보수', value: 4 },
   ];
 
-  const COLORS = ['#0088FE', '#00C49F'];
+  const COLORS = ['#1077BA','#E50127'];
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({

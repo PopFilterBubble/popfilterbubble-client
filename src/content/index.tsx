@@ -6,10 +6,20 @@ import VideoList from '../popup/components/VideoList';
 import { getDummy,popFilterAPI } from '../apis/service';
 console.info('pop-filterbubble-client content script');
 
-/*interface VideoData {
-  channelId: string;
-}*/
+export interface VideoListDto {
+  videoId: string
+  title: string
+  description: string
+  thumbnailUrl: string
+  publishedAt: string
+  channelId: string
+  channelTitle: string
+}
+
 let videoLength = 0;
+let videos: VideoListDto[] | null = null;
+
+
 function extractVideoData(): void {
   const videoList = document.querySelectorAll<HTMLDivElement>('#contents ytd-rich-item-renderer');
   const videoDataList: string[] = [];
@@ -27,20 +37,20 @@ function extractVideoData(): void {
   
   const chanelIdArr = videoDataList.slice(videoLength);
   console.log(chanelIdArr);
-  getDummyAPI(chanelIdArr);
-
+  
   videoLength = videoDataList.length;
-
-
+  if(videoLength !== 0) getDummyAPI(chanelIdArr);
 }
 
 async function getDummyAPI(channelIdArr: string[]) {
   
     const response = await getDummy(channelIdArr);
-    console.log(response);
+    console.log(response.data.videoListDTO);
 
     if (response.status === 200) {
       console.log("API SUCCESS!");
+      videos = response.data.videoListDTO;
+      insertCustomComponent();
     } else {
       console.log("API Error:", response.status);
     }
@@ -79,9 +89,11 @@ function observeScrollEnd(): void {
 }
 
 observeScrollEnd();
-// insertCustomComponent();
 
 window.addEventListener('resize', () => {
+  if(!videos) {
+    return;
+  }
   insertCustomComponent();
 });
 
@@ -110,14 +122,14 @@ function insertCustomComponent() {
 
     // Create a root and render the React component into the container
     const root = createRoot(container);
-    root.render(<VideoList />);
+    root.render(<VideoList videos={videos!}/>);
   } else {
     console.warn('Element with ID "next-element-id" not found.'); // replace 'next-element-id' with the actual ID
   }
 }
 
 // Initial insert
-insertCustomComponent();
+//insertCustomComponent();
 
 
 
