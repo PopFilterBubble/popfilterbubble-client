@@ -3,16 +3,16 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import VideoList from '../popup/components/VideoList';
-
+import { getDummy,popFilterAPI } from '../apis/service';
 console.info('pop-filterbubble-client content script');
 
-interface VideoData {
+/*interface VideoData {
   channelId: string;
-}
+}*/
 let videoLength = 0;
 function extractVideoData(): void {
   const videoList = document.querySelectorAll<HTMLDivElement>('#contents ytd-rich-item-renderer');
-  const videoDataList: VideoData[] = [];
+  const videoDataList: string[] = [];
 
   for (const video of videoList) {
     const channelElement = video.querySelector<HTMLDivElement>(
@@ -22,17 +22,31 @@ function extractVideoData(): void {
       ? new URL(channelElement.href).href.split('/').reverse()[0]
       : '';
     if(channelId == '') continue;
-    videoDataList.push({
-      channelId,
-    });
+    videoDataList.push(channelId);
   }
   
-  const arr = videoDataList.slice(videoLength);
-  console.log(arr);
+  const chanelIdArr = videoDataList.slice(videoLength);
+  console.log(chanelIdArr);
+  getDummyAPI(chanelIdArr);
+
   videoLength = videoDataList.length;
 
 
 }
+
+async function getDummyAPI(channelIdArr: string[]) {
+  
+    const response = await getDummy(channelIdArr);
+    console.log(response);
+
+    if (response.status === 200) {
+      console.log("API SUCCESS!");
+    } else {
+      console.log("API Error:", response.status);
+    }
+  
+}
+
 
 function observeScrollEnd(): void {
   const targetNode = document.querySelector<HTMLElement>(
@@ -46,6 +60,7 @@ function observeScrollEnd(): void {
     return;
   }
   extractVideoData();
+
   let scrollTimeout: ReturnType<typeof setTimeout>;
 
   const observer = new MutationObserver((mutationsList) => {
@@ -102,5 +117,6 @@ function insertCustomComponent() {
 
 // Initial insert
 insertCustomComponent();
+
 
 

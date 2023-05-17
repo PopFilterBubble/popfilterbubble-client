@@ -5,8 +5,8 @@ export const VideoList = () => {
   return (
     <div className="w-[1197px] p-4 flex overflow-x-auto mx-8 ">
       {sampleVideoList.map((video, index) => (
-        <div className='flex mx-3  '>
-          <VideoComponent key={index} {...video} />
+        <div key={index} className='flex mx-3  '>
+          <VideoComponent  {...video} />
 
         </div>
         
