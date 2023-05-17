@@ -21,10 +21,11 @@
     "fmt": "prettier --write '**/*.{tsx,ts,json,css,scss,md}'"
   },
   "dependencies": {
+    "@types/chrome": "^0.0.236",
     "autoprefixer": "^10.4.14",
+    "qs": "^6.11.2",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
-    "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.5.0"

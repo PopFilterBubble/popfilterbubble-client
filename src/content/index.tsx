@@ -1,24 +1,31 @@
 import '../tailwind.css';
 import React from 'react';
-import { render } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import VideoList from '../popup/components/VideoList';
-import { getDummy,popFilterAPI } from '../apis/service';
+import { getDummy, popFilterAPI } from '../apis/service';
+import axios from 'axios';
+
 console.info('pop-filterbubble-client content script');
 
 export interface VideoListDto {
-  videoId: string
-  title: string
-  description: string
-  thumbnailUrl: string
-  publishedAt: string
-  channelId: string
-  channelTitle: string
+  videoId: string;
+  title: string;
+  description: string;
+  thumbnailUrl: string;
+  publishedAt: string;
+  channelId: string;
+  channelTitle: string;
+}
+
+export interface PoliticsDTO {
+  conservative: string;
+  etc: string;
+  progressive: string;
+  unclassifie: string;
 }
 
 let videoLength = 0;
 let videos: VideoListDto[] | null = null;
-
 
 function extractVideoData(): void {
   const videoList = document.querySelectorAll<HTMLDivElement>('#contents ytd-rich-item-renderer');
@@ -31,32 +38,31 @@ function extractVideoData(): void {
     const channelId = channelElement
       ? new URL(channelElement.href).href.split('/').reverse()[0]
       : '';
-    if(channelId == '') continue;
+    if (channelId == '') continue;
     videoDataList.push(channelId);
   }
-  
+
   const chanelIdArr = videoDataList.slice(videoLength);
   console.log(chanelIdArr);
-  
+
   videoLength = videoDataList.length;
-  if(videoLength !== 0) getDummyAPI(chanelIdArr);
+  if (videoLength !== 0) getDummyAPI(chanelIdArr);
 }
 
 async function getDummyAPI(channelIdArr: string[]) {
-  
-    const response = await getDummy(channelIdArr);
-    console.log(response.data.videoListDTO);
+  const response = await getDummy(channelIdArr);
+  console.log(response.data.videoListDTO);
 
-    if (response.status === 200) {
-      console.log("API SUCCESS!");
-      videos = response.data.videoListDTO;
-      insertCustomComponent();
-    } else {
-      console.log("API Error:", response.status);
-    }
-  
+  if (response.status === 200) {
+    console.log('API SUCCESS!');
+    const data = response.data;
+    videos = data.videoListDTO;
+    sendPoliticsDataToBackground(data.politicsDTO);
+    insertCustomComponent();
+  } else {
+    console.log('API Error:', response.status);
+  }
 }
-
 
 function observeScrollEnd(): void {
   const targetNode = document.querySelector<HTMLElement>(
@@ -88,16 +94,25 @@ function observeScrollEnd(): void {
   observer.observe(targetNode, config);
 }
 
-observeScrollEnd();
-
 window.addEventListener('resize', () => {
-  if(!videos) {
+  if (!videos) {
     return;
   }
   insertCustomComponent();
 });
 
 function insertCustomComponent() {
+  const channelId = 'your_channel_id'; // replace with your actual channel ID
+
+  axios
+    .get(`https://popfilterbubble.site/dummy/politics?channelId=${channelId}`)
+    .then((response: any) => {
+      console.log(response.data); // handle the response here
+    })
+    .catch((error: any) => {
+      console.error(error); // handle the error here
+    });
+
   // Check if the component already exists
   const existingContainer = document.getElementById('my-custom-container');
   if (existingContainer) {
@@ -108,7 +123,7 @@ function insertCustomComponent() {
   const container = document.createElement('div');
   container.id = 'my-custom-container'; // Assign an ID to the container
   // container.style.backgroundColor = '#FFFFEE';
-  container.style.width = "100%"
+  container.style.width = '100%';
   //container.style.paddingLeft = '24px'
   //container.style.paddingRight = '24px';
   //container.style.border = '1px solid black';
@@ -122,14 +137,15 @@ function insertCustomComponent() {
 
     // Create a root and render the React component into the container
     const root = createRoot(container);
-    root.render(<VideoList videos={videos!}/>);
+    root.render(<VideoList videos={videos!} />);
   } else {
     console.warn('Element with ID "next-element-id" not found.'); // replace 'next-element-id' with the actual ID
   }
 }
 
+function sendPoliticsDataToBackground(data: PoliticsDTO) {
+  chrome.runtime.sendMessage({ politicsData: data });
+}
+
 // Initial insert
-//insertCustomComponent();
-
-
-
+observeScrollEnd();

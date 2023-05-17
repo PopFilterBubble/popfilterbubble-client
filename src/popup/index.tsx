@@ -4,7 +4,7 @@ import App from './Popup';
 import '../tailwind.css';
 
 ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
 import { PieChart, Pie, Legend, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { PoliticsDTO } from '../content';
 
-const PieChartComponent = () => {
+const PieChartComponent = ({ progressive, conservative }: PoliticsDTO) => {
   const data = [
-    { name: '진보', value: 5 },
-    { name: '보수', value: 4 },
+    { name: '진보', value: progressive },
+    { name: '보수', value: conservative },
   ];
 
-  const COLORS = ['#1077BA','#E50127'];
+  const COLORS = ['#1077BA', '#E50127'];
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({

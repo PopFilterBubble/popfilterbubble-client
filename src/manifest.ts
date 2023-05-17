@@ -1,6 +1,7 @@
 import { defineManifest } from '@crxjs/vite-plugin';
 
 export default defineManifest({
+  permissions: ['storage'],
   name: 'pop-filter-bubble',
   description: '',
   version: '0.0.0',
@@ -31,5 +32,4 @@ export default defineManifest({
       matches: [],
     },
   ],
-  permissions: [],
 });
