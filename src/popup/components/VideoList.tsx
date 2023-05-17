@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { sampleVideoList } from './sample';
+import { formatDistanceToNow,isToday } from 'date-fns';
+import ko from 'date-fns/locale/ko';
 export interface VideoListDto {
   videoId: string
   title: string
@@ -51,6 +53,30 @@ const VideoComponent = ({
     }
     setIsHovered(false);
   };
+  
+  const targetDate = Date.parse(publishedAt);
+  const distanceInWords = formatDistanceToNow(targetDate,{locale : ko});
+  const now = new Date();
+
+  // if (isToday(targetDate)) {
+  //   const hours = Math.floor((now.getTime() - targetDate.getTime()) / (1000 * 60 * 60));
+  //   if (hours > 0) {
+  //     distanceInWords = `${hours}시간 전`;
+  //   }
+  // }
+
+  let formattedTime = distanceInWords + ' 전';
+
+  if (distanceInWords.includes('일')) {
+    const days = parseInt(distanceInWords, 10);
+    if (days >= 30) {
+      const months = Math.floor(days / 30);
+      formattedTime = `${months}개월 전`;
+    }
+  
+  }
+
+  
 
   return (
     <div
@@ -91,7 +117,7 @@ const VideoComponent = ({
           <div>
             <p className="text-[14px] cursor-pointer leading-6 mb-2">{channelTitle}</p>
             <p className="text-[14px] cursor-pointer leading-5">
-              조회수 {/*{views}*/} · {publishedAt}
+              조회수 {/*{views}*/} · {formattedTime}
             </p>
           </div>
         </div>
