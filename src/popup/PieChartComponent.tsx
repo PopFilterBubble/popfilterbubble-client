@@ -1,11 +1,11 @@
 import { PieChart, Pie, Legend, Sector, Cell, ResponsiveContainer } from 'recharts';
 import { PoliticsDTO } from '../content';
 
-const PieChartComponent = ({ progressive, conservative, unclassifie }: PoliticsDTO) => {
+const PieChartComponent = ({ progressive, conservative, unclassified }: PoliticsDTO) => {
   const data = [
     { name: '진보', value: progressive },
     { name: '보수', value: conservative },
-    { name: '미분류', value: unclassifie },
+    { name: '미분류', value: unclassified },
   ];
 
 

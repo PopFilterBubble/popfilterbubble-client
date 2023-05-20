@@ -21,7 +21,7 @@ export interface PoliticsDTO {
   conservative: string;
   etc: string;
   progressive: string;
-  unclassifie: string;
+  unclassified: string;
 }
 
 let videoLength = 0;
