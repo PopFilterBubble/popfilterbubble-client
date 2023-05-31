@@ -15,8 +15,8 @@ export interface VideoListDto {
   publishedAt: string;
   channelId: string;
   channelTitle: string;
-  url : string;
-  viewCount : 0;
+  url: string;
+  viewCount: 0;
 }
 
 export interface PoliticsDTO {
@@ -51,30 +51,22 @@ function extractVideoData(): void {
   console.log(videoLength);
   if (videoLength !== 0) {
     getYoutubeAPI(chanelIdArr);
-}
-
   }
+}
 
 async function getYoutubeAPI(channelIdArr: string[]) {
   console.log('API HOST START');
   const response = await getVideosAPI(channelIdArr);
-  
-  if (response.status === 200) {
-    
-    if(response.data !== undefined) {
-      console.log('API SUCCESS!');
-      const data = response.data;
-      console.log(data.videoListDTO);
-      videos = data.videoListDTO;
-      sendPoliticsDataToBackground(data.politicsDTO);
-      insertCustomComponent();
-    }
-   
-  } else {
-    console.log('API Error:', response.status);
+
+  if (response.status == 200 && response.data) {
+    console.log('API SUCCESS!');
+    const data = response.data;
+    console.log(data.videoListDTO);
+    videos = data.videoListDTO;
+    sendPoliticsDataToBackground(data.politicsDTO);
+    insertCustomComponent();
   }
 }
-
 
 function observeScrollEnd(): void {
   const targetNode = document.querySelector<HTMLElement>(
@@ -123,9 +115,8 @@ function insertCustomComponent() {
   // Create a container for your custom layout
   const container = document.createElement('div');
   container.id = 'my-custom-container'; // Assign an ID to the container
-  
-  container.style.width = '100%';
 
+  container.style.width = '100%';
 
   const nextElement = document.getElementById('contents'); // replace 'next-element-id' with the actual ID
 
