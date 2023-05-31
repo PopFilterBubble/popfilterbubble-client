@@ -10,6 +10,9 @@ export interface VideoListDto {
   publishedAt: string
   channelId: string
   channelTitle: string
+  url : string
+  viewCount : 0
+
 }
 
 
@@ -18,7 +21,7 @@ export const VideoList = ({videos}  : { videos: VideoListDto[]}) => {
     <div className='mx-8'>
       <h1 className='ml-7 mt-8 mb-4 text-[24px] font-semibold'>팝필터버블이 추천하는 영상 리스트</h1>
       <div className="p-4 flex overflow-x-auto ">
-        {videos.map((video, index) => (
+        {videos && videos.map((video, index) => (
           <div key={index} className="flex mx-3">
             <VideoComponent {...video} />
           </div>
@@ -36,6 +39,9 @@ const VideoComponent = ({
   publishedAt,
   channelId,
   channelTitle,
+  url,
+  viewCount,
+
 }: VideoListDto) => {
   const [isHovered, setIsHovered] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -75,6 +81,19 @@ const VideoComponent = ({
     }
   
   }
+  let formattedCount = formatViewCount(viewCount);
+  function formatViewCount(viewCount: number): string {
+    if (viewCount < 1000) {
+      return viewCount.toString();
+    } else if (viewCount < 10000) {
+      return `${viewCount}회`;
+    } else {
+      const formattedCount = (viewCount / 10000).toFixed(1);
+      return `${formattedCount}만회`;
+    }
+  }
+
+  
 
   
 
@@ -84,11 +103,11 @@ const VideoComponent = ({
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
     >
-      <a href="https://www.youtube.com" className="w-[359px]  flex-shrink-0 relative">
+      <a href={url} className="w-[359px]  flex-shrink-0 relative">
         <img
           src={thumbnailUrl}
           alt="video thumbnail"
-          className="object-cover w-[359px] h-[202px] rounded-[12px] transition-opacity duration-500"
+          className=" w-[359px] h-[202px] rounded-[12px] transition-opacity duration-500"
         />
         {/* <img
           src={preview}
@@ -117,7 +136,7 @@ const VideoComponent = ({
           <div>
             <p className="text-[14px] cursor-pointer leading-6 mb-2">{channelTitle}</p>
             <p className="text-[14px] cursor-pointer leading-5">
-              조회수 {/*{views}*/} · {formattedTime}
+              조회수 {formattedCount} · {formattedTime}
             </p>
           </div>
         </div>

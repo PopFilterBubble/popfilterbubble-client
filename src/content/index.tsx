@@ -2,7 +2,7 @@ import '../tailwind.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import VideoList from '../popup/components/VideoList';
-import { getDummy, popFilterAPI } from '../apis/service';
+import { getVideosAPI, popFilterAPI } from '../apis/service';
 import axios from 'axios';
 
 console.info('pop-filterbubble-client content script');
@@ -15,6 +15,8 @@ export interface VideoListDto {
   publishedAt: string;
   channelId: string;
   channelTitle: string;
+  url : string;
+  viewCount : 0;
 }
 
 export interface PoliticsDTO {
@@ -33,7 +35,8 @@ function extractVideoData(): void {
 
   for (const video of videoList) {
     const channelElement = video.querySelector<HTMLDivElement>(
-      '#channel-name #text-container a',
+      //'#channel-name #text-container a',
+      '#channel-name > div > div > yt-formatted-string > a',
     ) as any;
     const channelId = channelElement
       ? new URL(channelElement.href).href.split('/').reverse()[0]
@@ -45,24 +48,63 @@ function extractVideoData(): void {
   const chanelIdArr = videoDataList.slice(videoLength);
   console.log(chanelIdArr);
 
-  videoLength = videoDataList.length;
-  if (videoLength !== 0) getDummyAPI(chanelIdArr);
+  videoLength = chanelIdArr.length;
+  console.log(videoLength);
+  if (videoLength !== 0) {
+    getYoutubeAPI(chanelIdArr);
 }
 
-async function getDummyAPI(channelIdArr: string[]) {
-  const response = await getDummy(channelIdArr);
-  console.log(response.data.videoListDTO);
+  }
 
+async function getYoutubeAPI(channelIdArr: string[]) {
+  console.log('API HOST START');
+  const response = await getVideosAPI(channelIdArr);
+  
   if (response.status === 200) {
-    console.log('API SUCCESS!');
-    const data = response.data;
-    videos = data.videoListDTO;
-    sendPoliticsDataToBackground(data.politicsDTO);
-    insertCustomComponent();
+    
+    //console.log(response);
+    if(response.data !== undefined) {
+      console.log('API SUCCESS!');
+      const data = response.data;
+      console.log(data.videoListDTO);
+      videos = data.videoListDTO;
+      sendPoliticsDataToBackground(data.politicsDTO);
+      insertCustomComponent();
+    }
+    //const data = response.data;
+    
+    
   } else {
     console.log('API Error:', response.status);
   }
 }
+/*async function getYoutubeAPI(channelIdArr: string[]) {
+  console.log('Hi');
+  
+  try {
+    const response = await getVideosAPI(channelIdArr);
+    
+    if (response && response.status === 200) {
+      console.log('API SUCCESS!');
+      console.log(response);
+      
+      const data = response.data;
+      if (data) {
+        console.log(data.politicsDTO);
+        videos = data.videoListDTO;
+        sendPoliticsDataToBackground(data.politicsDTO);
+        insertCustomComponent();
+      } else {
+        console.log('Invalid API response: missing data');
+      }
+    } else {
+      console.log('API Error:', response ? response.status : 'Unknown');
+    }
+  } catch (error) {
+    console.log('API Error:', error);
+  }
+}
+*/
 
 function observeScrollEnd(): void {
   const targetNode = document.querySelector<HTMLElement>(
@@ -102,17 +144,6 @@ window.addEventListener('resize', () => {
 });
 
 function insertCustomComponent() {
-  const channelId = 'your_channel_id'; // replace with your actual channel ID
-
-  axios
-    .get(`https://popfilterbubble.site/dummy/politics?channelId=${channelId}`)
-    .then((response: any) => {
-      console.log(response.data); // handle the response here
-    })
-    .catch((error: any) => {
-      console.error(error); // handle the error here
-    });
-
   // Check if the component already exists
   const existingContainer = document.getElementById('my-custom-container');
   if (existingContainer) {
