@@ -43,22 +43,6 @@ const VideoComponent = ({
   viewCount,
 
 }: VideoListDto) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
-
-  const handleMouseOver = () => {
-    const timeout = setTimeout(() => {
-      setIsHovered(true);
-    }, 200);
-    setHoverTimeout(timeout);
-  };
-
-  const handleMouseOut = () => {
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-    }
-    setIsHovered(false);
-  };
   
   const targetDate = Date.parse(publishedAt);
   const distanceInWords = formatDistanceToNow(targetDate,{locale : ko});
@@ -100,8 +84,7 @@ const VideoComponent = ({
   return (
     <div
       className="w-[360px] h-[332px] mb-2 gap-2 "
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
+
     >
       <a href={url} className="w-[359px]  flex-shrink-0 relative">
         <img
@@ -109,13 +92,7 @@ const VideoComponent = ({
           alt="video thumbnail"
           className=" w-[359px] h-[202px] rounded-[12px] transition-opacity duration-500"
         />
-        {/* <img
-          src={preview}
-          alt="video preview"
-          className={`object-fill rounded-[12px] absolute top-0 left-0 transition-opacity duration-500 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
-          }`}
-        /> */}
+        
       </a>
 
       <div className="flex mt-3">

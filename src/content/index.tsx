@@ -35,7 +35,6 @@ function extractVideoData(): void {
 
   for (const video of videoList) {
     const channelElement = video.querySelector<HTMLDivElement>(
-      //'#channel-name #text-container a',
       '#channel-name > div > div > yt-formatted-string > a',
     ) as any;
     const channelId = channelElement
@@ -62,7 +61,6 @@ async function getYoutubeAPI(channelIdArr: string[]) {
   
   if (response.status === 200) {
     
-    //console.log(response);
     if(response.data !== undefined) {
       console.log('API SUCCESS!');
       const data = response.data;
@@ -71,40 +69,12 @@ async function getYoutubeAPI(channelIdArr: string[]) {
       sendPoliticsDataToBackground(data.politicsDTO);
       insertCustomComponent();
     }
-    //const data = response.data;
-    
-    
+   
   } else {
     console.log('API Error:', response.status);
   }
 }
-/*async function getYoutubeAPI(channelIdArr: string[]) {
-  console.log('Hi');
-  
-  try {
-    const response = await getVideosAPI(channelIdArr);
-    
-    if (response && response.status === 200) {
-      console.log('API SUCCESS!');
-      console.log(response);
-      
-      const data = response.data;
-      if (data) {
-        console.log(data.politicsDTO);
-        videos = data.videoListDTO;
-        sendPoliticsDataToBackground(data.politicsDTO);
-        insertCustomComponent();
-      } else {
-        console.log('Invalid API response: missing data');
-      }
-    } else {
-      console.log('API Error:', response ? response.status : 'Unknown');
-    }
-  } catch (error) {
-    console.log('API Error:', error);
-  }
-}
-*/
+
 
 function observeScrollEnd(): void {
   const targetNode = document.querySelector<HTMLElement>(
@@ -153,11 +123,9 @@ function insertCustomComponent() {
   // Create a container for your custom layout
   const container = document.createElement('div');
   container.id = 'my-custom-container'; // Assign an ID to the container
-  // container.style.backgroundColor = '#FFFFEE';
+  
   container.style.width = '100%';
-  //container.style.paddingLeft = '24px'
-  //container.style.paddingRight = '24px';
-  //container.style.border = '1px solid black';
+
 
   const nextElement = document.getElementById('contents'); // replace 'next-element-id' with the actual ID
 
