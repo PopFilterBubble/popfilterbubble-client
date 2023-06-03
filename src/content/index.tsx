@@ -146,4 +146,9 @@ function sendPoliticsDataToBackground(data: PoliticsDTO) {
 }
 
 // Initial insert
+
+chrome.storage.local.remove('politicsData', function() {
+  console.log('politicsData has been removed');
+});
+
 observeScrollEnd();
