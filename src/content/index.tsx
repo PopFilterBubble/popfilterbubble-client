@@ -44,13 +44,13 @@ function extractVideoData(): void {
     videoDataList.push(channelId);
   }
 
-  const chanelIdArr = videoDataList.slice(videoLength);
-  console.log(chanelIdArr);
+  //const chanelIdArr = videoDataList.slice(videoLength);
+  //console.log(chanelIdArr);
 
-  videoLength = chanelIdArr.length;
-  //console.log(videoLength);
+  videoLength = videoDataList.length;
+  console.log(videoLength);
   if (videoLength !== 0) {
-    getYoutubeAPI(chanelIdArr);
+    getYoutubeAPI(videoDataList);
   }
 }
 
