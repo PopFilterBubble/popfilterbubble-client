@@ -65,7 +65,7 @@ const VideoComponent = ({
     }
   
   }
-  let formattedCount = formatViewCount(viewCount);
+  
   function formatViewCount(viewCount: number): string {
     if (viewCount < 1000) {
       return viewCount.toString();
@@ -76,6 +76,8 @@ const VideoComponent = ({
       return `${formattedCount}만회`;
     }
   }
+
+  let formattedCount = formatViewCount(viewCount);
 
   
 
@@ -90,7 +92,7 @@ const VideoComponent = ({
         <img
           src={thumbnailUrl}
           alt="video thumbnail"
-          className=" w-[359px] h-[202px] rounded-[12px] transition-opacity duration-500"
+          className="object-cover w-[359px] h-[202px] rounded-[12px] transition-opacity duration-500"
         />
         
       </a>
