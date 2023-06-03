@@ -27,7 +27,7 @@ export interface PoliticsDTO {
 }
 
 let videoLength = 0;
-let videos: VideoListDto[] | null = null;
+let videos: VideoListDto[] = [];
 
 function extractVideoData(): void {
   const videoList = document.querySelectorAll<HTMLDivElement>('#contents ytd-rich-item-renderer');
@@ -48,7 +48,7 @@ function extractVideoData(): void {
   console.log(chanelIdArr);
 
   videoLength = chanelIdArr.length;
-  console.log(videoLength);
+  //console.log(videoLength);
   if (videoLength !== 0) {
     getYoutubeAPI(chanelIdArr);
   }
@@ -62,9 +62,17 @@ async function getYoutubeAPI(channelIdArr: string[]) {
     console.log('API SUCCESS!');
     const data = response.data;
     console.log(data.videoListDTO);
-    videos = data.videoListDTO;
+    
+    videos = videos.concat(data.videoListDTO);
+    //videos = data.videoListDTO;
+    console.log(videos.length);
     sendPoliticsDataToBackground(data.politicsDTO);
     insertCustomComponent();
+  }
+  else {
+    console.log("API FAIL!")
+    console.log(response);
+
   }
 }
 
@@ -99,7 +107,7 @@ function observeScrollEnd(): void {
 }
 
 window.addEventListener('resize', () => {
-  if (!videos) {
+  if (videos.length===0) {
     return;
   }
   insertCustomComponent();
@@ -127,7 +135,7 @@ function insertCustomComponent() {
 
     // Create a root and render the React component into the container
     const root = createRoot(container);
-    root.render(<VideoList videos={videos!} />);
+    root.render(<VideoList videos={videos} />);
   } else {
     console.warn('Element with ID "next-element-id" not found.'); // replace 'next-element-id' with the actual ID
   }
