@@ -1,9 +1,7 @@
 import '../tailwind.css';
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import VideoList from '../popup/components/VideoList';
-import { getVideosAPI, popFilterAPI } from '../apis/service';
-import axios from 'axios';
+import { getVideosAPI } from '../apis/service';
 
 console.info('pop-filterbubble-client content script');
 
@@ -26,31 +24,31 @@ export interface PoliticsDTO {
   unclassified: string;
 }
 
-let videoLength = 0;
-let videos: VideoListDto[] = [];
+let originChannelIDListLength = 0;
 
 function extractVideoData(): void {
-  const videoList = document.querySelectorAll<HTMLDivElement>('#contents ytd-rich-item-renderer');
-  const videoDataList: string[] = [];
+  const videoElements = document.querySelectorAll<HTMLDivElement>('#contents ytd-rich-item-renderer');
+  const channelIDList: string[] = [];
 
-  for (const video of videoList) {
-    const channelElement = video.querySelector<HTMLDivElement>(
+  for (const videoElement of videoElements) {
+    const channelElement = videoElement.querySelector<HTMLDivElement>(
       '#channel-name > div > div > yt-formatted-string > a',
     ) as any;
     const channelId = channelElement
       ? new URL(channelElement.href).href.split('/').reverse()[0]
       : '';
     if (channelId == '') continue;
-    videoDataList.push(channelId);
+    channelIDList.push(channelId);
   }
+  
+  if (originChannelIDListLength == channelIDList.length) {
+    return
+  }
+  console.log('[DOM] chanelIdList length: ', channelIDList.length);
+  originChannelIDListLength = channelIDList.length;
 
-  //const chanelIdArr = videoDataList.slice(videoLength);
-  //console.log(chanelIdArr);
-
-  videoLength = videoDataList.length;
-  console.log(videoLength);
-  if (videoLength !== 0) {
-    getYoutubeAPI(videoDataList);
+  if (originChannelIDListLength !== 0) {
+    getYoutubeAPI(channelIDList);
   }
 }
 
@@ -62,12 +60,10 @@ async function getYoutubeAPI(channelIdArr: string[]) {
     console.log('API SUCCESS!');
     const data = response.data;
     console.log(data.videoListDTO);
+    console.log(data.politicsDTO);
     
-    videos = videos.concat(data.videoListDTO);
-    //videos = data.videoListDTO;
-    console.log(videos.length);
     sendPoliticsDataToBackground(data.politicsDTO);
-    insertCustomComponent();
+    insertCustomComponent(data.videoListDTO);
   }
   else {
     console.log("API FAIL!")
@@ -106,39 +102,32 @@ function observeScrollEnd(): void {
   observer.observe(targetNode, config);
 }
 
-window.addEventListener('resize', () => {
-  if (videos.length===0) {
-    return;
-  }
-  insertCustomComponent();
-});
+function insertCustomComponent(videos: VideoListDto[]) {
+  const nextElement = document.getElementById('contents');
+  let container = document.getElementById('my-custom-container');
 
-function insertCustomComponent() {
-  // Check if the component already exists
-  const existingContainer = document.getElementById('my-custom-container');
-  if (existingContainer) {
-    return; // The component already exists, so we do nothing
-  }
-
-  // Create a container for your custom layout
-  const container = document.createElement('div');
-  container.id = 'my-custom-container'; // Assign an ID to the container
-
-  container.style.width = '100%';
-
-  const nextElement = document.getElementById('contents'); // replace 'next-element-id' with the actual ID
-
-  // Check if the nextElement exists
-  if (nextElement && nextElement.parentElement) {
-    // Insert the container right before the nextElement
-    nextElement.parentElement.insertBefore(container, nextElement);
-
-    // Create a root and render the React component into the container
-    const root = createRoot(container);
-    root.render(<VideoList videos={videos} />);
+  // Create a container if it doesn't exist yet
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'my-custom-container'; // Assign an ID to the container
+    container.style.width = '100%';
+    
+    // Check if the nextElement exists
+    if (nextElement && nextElement.parentElement) {
+      // Insert the container right before the nextElement
+      nextElement.parentElement.insertBefore(container, nextElement);
+    } else {
+      console.warn('Element with ID "contents" not found.');
+      return;
+    }
   } else {
-    console.warn('Element with ID "next-element-id" not found.'); // replace 'next-element-id' with the actual ID
+    // If container already exists, clear its contents
+    container.innerHTML = '';
   }
+
+  // Create a root and render the React component into the container
+  const root = createRoot(container);
+  root.render(<VideoList videos={videos} />);
 }
 
 function sendPoliticsDataToBackground(data: PoliticsDTO) {
