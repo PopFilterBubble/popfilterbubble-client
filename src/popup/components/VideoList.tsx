@@ -10,6 +10,7 @@ export interface VideoListDto {
   publishedAt: string
   channelId: string
   channelTitle: string
+  channelImg : string
   url : string
   viewCount : 0
 
@@ -39,6 +40,7 @@ const VideoComponent = ({
   publishedAt,
   channelId,
   channelTitle,
+  channelImg,
   url,
   viewCount,
 
@@ -68,7 +70,7 @@ const VideoComponent = ({
   
   function formatViewCount(viewCount: number): string {
     if (viewCount < 1000) {
-      return viewCount.toString();
+      return `${viewCount}회`;
     } else if (viewCount < 10000) {
       return `${viewCount}회`;
     } else {
@@ -105,7 +107,7 @@ const VideoComponent = ({
             className="style-scope rounded-full  mr-3"
             alt=""
             width="36"
-            src="https://yt3.ggpht.com/ytc/AGIKgqNY9zCJ9lqPfMA6kAvHkse3yAXIAv2pZrFQqdgK5A=s68-c-k-c0x00ffffff-no-rj"
+            src={channelImg}
           />
         </div>
         <div>
