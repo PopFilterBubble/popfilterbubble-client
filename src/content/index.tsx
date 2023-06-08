@@ -13,6 +13,7 @@ export interface VideoListDto {
   publishedAt: string;
   channelId: string;
   channelTitle: string;
+  channelImg : string;
   url: string;
   viewCount: 0;
 }

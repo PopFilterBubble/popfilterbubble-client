@@ -22,7 +22,7 @@ export const popFilterAPI = axios.create({
 
 export const getVideosAPI = async(channelIdArr: string[]) => {
     const params = {
-        channelId : channelIdArr,
+        customId : channelIdArr,
     };
     const queryString = qs.stringify(params,{arrayFormat : 'repeat'});
     return await popFilterAPI.get(`/api/youtube/politics?${queryString}`);
