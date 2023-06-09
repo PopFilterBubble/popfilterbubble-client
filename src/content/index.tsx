@@ -137,8 +137,8 @@ function sendPoliticsDataToBackground(data: PoliticsDTO) {
 
 // Initial insert
 
-chrome.storage.local.remove('politicsData', function() {
-  console.log('politicsData has been removed');
+chrome.storage.local.remove('VideoListDto', function() {
+  console.log('VideoListDto has been removed');
 });
 
 observeScrollEnd();
